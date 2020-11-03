@@ -1,7 +1,7 @@
 import React from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import {getHistoryData} from './Variables';
+import {getHistoryData,transformDate,refreshDates} from './Variables';
 
 
 class Contribution extends React.Component{
@@ -15,20 +15,68 @@ class Contribution extends React.Component{
             dateOptions: null
 
         }
+
+        this.updateDate = this.updateDate.bind(this)
+        this.updateAndPresentDates = this.updateAndPresentDates.bind(this)
     }
 
     componentDidMount(){
 
+        //Get the current week string
+        var currentWeekStr = getCurrentWeek()
+
+        //Transform the date
+        transformDate(currentWeekStr).then(data => this.updateDate(data, currentWeekStr))
+
+
+
+    }
+
+    updateDate(currentWeekStrDict,currentWeekStr){
+
+        //Make a method to find the key
+        const getKey = (obj,val) => Object.keys(obj).find(key => obj[key] === val);
+
+        //Split the week strings into an array so that it can be
+        var currWeekArr = [getKey(currentWeekStrDict, currentWeekStr), currentWeekStr]
+
         //Get the history data
-        getHistoryData('PreviousDates','allDates').then(data =>
-            
-            // Set the date as the
-            this.setState({
-                dateOptions: Object.keys(data),
-                currentDate: "Hello"
-            })
-            
-            )
+        getHistoryData().then(data => this.updateAndPresentDates(currWeekArr, data)
+      
+ 
+          
+          )
+
+    }
+
+    updateAndPresentDates(currWeekArr, prevDates){
+        
+        //First check if current week is a part of the previous dates
+        if (currWeekArr[0] in prevDates){
+
+          //Set the date as per normal
+          this.setState({
+            dateOptions: prevDates,
+            currentDateKey:currWeekArr[0]
+          })
+
+        }
+        else{
+          //This means the date must be added to the previous dates and then be pushed to the db
+          prevDates[currWeekArr[0]] = currWeekArr[1]; 
+
+          //Now push the prevDates to the database.
+          refreshDates(prevDates).then(data => console.log(data))
+
+          //Now set the state
+          this.setState({
+            dateOptions: prevDates,
+            currentDateKey:currWeekArr[0]
+          })
+          
+        }
+
+
     }
 
     
@@ -45,8 +93,8 @@ class Contribution extends React.Component{
                         <Select
                         title={"Select Date"}
                         name={'date'}
-                        options = {this.state.dateOptions}
-                        //value = {this.state.currentDate}
+                        options = {Object.keys(this.state.dateOptions)}
+                        value = {this.state.currentDateKey}
                         // handleChange = {this.handleString}
                         />
                     </div>
