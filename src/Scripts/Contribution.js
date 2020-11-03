@@ -1,22 +1,67 @@
 import React from 'react';
 import Tabs from 'react-bootstrap/Tabs';
-import Tab from 'react-bootstrap/Tab'
+import Tab from 'react-bootstrap/Tab';
+import {getHistoryData} from './Variables';
+
 
 class Contribution extends React.Component{
+
+    constructor(props){
+        super(props)
+
+        //The state of class
+        this.state = {
+            currentDate: null,
+            dateOptions: null
+
+        }
+    }
+
+    componentDidMount(){
+
+        //Get the history data
+        getHistoryData('PreviousDates','allDates').then(data =>
+            
+            // Set the date as the
+            this.setState({
+                dateOptions: Object.keys(data),
+                currentDate: "Hello"
+            })
+            
+            )
+    }
 
     
 
     render(){
+        console.log(this.state.dateOptions)
         return(
             <div>
-                <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
-                    <Tab eventKey="income-submission" title="Income Submission">
-                    <div>{getCurrentWeek()} </div>
-                    </Tab>
-                    <Tab eventKey="payment" title="Payment">
-                    <div>World</div>
-                    </Tab>
-                </Tabs>
+                {//Check if the options have loaded 
+                this.state.dateOptions != null
+                ?
+                <div>
+                    <div>
+                        <Select
+                        title={"Select Date"}
+                        name={'date'}
+                        options = {this.state.dateOptions}
+                        //value = {this.state.currentDate}
+                        // handleChange = {this.handleString}
+                        />
+                    </div>
+                    <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
+                        <Tab eventKey="income-submission" title="Income Submission">
+                        <div>{getCurrentWeek()} </div>
+                        </Tab>
+                        <Tab eventKey="payment" title="Payment">
+                        <div>World</div>
+                        </Tab>
+                    </Tabs>
+                </div>
+                :
+                <div>Loading...</div>
+                }
             </div>
         )
     }
@@ -62,6 +107,33 @@ function getFollowingSunday(){
 
     return follSunday;
 
-
 }
+
+const Select = props => {
+	return (
+	  <div className="form-group">
+		<label for={props.name}> {props.title} </label>
+		<select
+		  id={props.name}
+		  name={props.name}
+		  value={props.value}
+		  onChange={props.handleChange}
+		  className="form-control"
+		>
+		  <option value="" disabled>
+			{props.placeholder}
+		  </option>
+		  {props.options.map(option => {
+			return (
+			  <option key={option} value={option} label={option}>
+				{option}
+			  </option>
+			);
+		  })}
+		</select>
+	  </div>
+	);
+  };
+
+
 export default Contribution;
