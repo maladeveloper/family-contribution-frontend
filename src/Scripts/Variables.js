@@ -17,24 +17,6 @@ var getHistoryData = function(){
         })
 }
 
-var transformDate = function(dateStr){
-    return new Promise(function(resolve,reject){
-
-                //Make the options required for a post request
-                const requestOptions = {
-                    method: 'POST', 
-                    headers: {'Content-Type':'application/json'},
-                    
-                    //Put in all the form details here
-                    body: JSON.stringify({info:dateStr})
-                }
-
-                //Make the URL
-                const URL = BASE_URL +'transformDate';
-                //Now with all this information make the post request 
-                fetch(URL, requestOptions).then(response => response.json()).then(data => resolve(data));
-            })
-}
 
 var refreshDates = function(prevDates){
     return new Promise(function(resolve,reject){
@@ -54,4 +36,4 @@ var refreshDates = function(prevDates){
                 fetch(URL, requestOptions).then(response => response.json()).then(data => resolve(data));
             })
 }
-export {getHistoryData,transformDate,refreshDates}; 
+export {getHistoryData,refreshDates}; 

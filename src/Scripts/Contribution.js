@@ -1,7 +1,7 @@
 import React from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import {getHistoryData,transformDate,refreshDates} from './Variables';
+import {getHistoryData,refreshDates} from './Variables';
 
 
 class Contribution extends React.Component{
@@ -12,69 +12,65 @@ class Contribution extends React.Component{
         //The state of class
         this.state = {
             currentDate: null,
-            dateOptions: null
+            dateOptions: null, 
+            dateInformation: null
 
         }
 
-        this.updateDate = this.updateDate.bind(this)
-        this.updateAndPresentDates = this.updateAndPresentDates.bind(this)
+        this.updateDates = this.updateDates.bind(this); 
+        this.handleDateChoice = this.handleDateChoice.bind(this)
+
     }
 
     componentDidMount(){
-
-        //Get the current week string
-        var currentWeekStr = getCurrentWeek()
-
-        //Transform the date
-        transformDate(currentWeekStr).then(data => this.updateDate(data, currentWeekStr))
-
-
-
-    }
-
-    updateDate(currentWeekStrDict,currentWeekStr){
-
-        //Make a method to find the key
-        const getKey = (obj,val) => Object.keys(obj).find(key => obj[key] === val);
-
-        //Split the week strings into an array so that it can be
-        var currWeekArr = [getKey(currentWeekStrDict, currentWeekStr), currentWeekStr]
-
-        //Get the history data
-        getHistoryData().then(data => this.updateAndPresentDates(currWeekArr, data)
       
- 
-          
-          )
+      //Call fore the dates data to be set
+      getHistoryData().then(data =>this.updateDates(data))
+        
+  
 
     }
+    
+    updateDates(data){
 
-    updateAndPresentDates(currWeekArr, prevDates){
-        
-        //First check if current week is a part of the previous dates
-        if (currWeekArr[0] in prevDates){
+      //If the current date is not in the array
+      if (!data.includes(getCurrentWeek())){
 
-          //Set the date as per normal
-          this.setState({
-            dateOptions: prevDates,
-            currentDateKey:currWeekArr[0]
-          })
+        //Add the date to the array
+        data.push(getCurrentWeek())
 
-        }
-        else{
-          //This means the date must be added to the previous dates and then be pushed to the db
-          prevDates[currWeekArr[0]] = currWeekArr[1]; 
+        //Then we have to ask the backend to refresh the dates
+        refreshDates(data).then(() => getHistoryData().then( refreshedData =>
+         
+            //Now set the state
+            this.setState({
+              currentDate: getCurrentWeek(), 
+              dateOptions: refreshedData
+            })
+          )
+        )
+      }
+      //Otherwise just set the data
+      else{
 
-          //Now push the prevDates to the database.
-          refreshDates(prevDates).then(data => console.log(data))
+        //Set the data in the state 
+        this.setState({
+          currentDate: getCurrentWeek(), 
+          dateOptions: data
+        })
+      }
+    }
 
-          //Now set the state
-          this.setState({
-            dateOptions: prevDates,
-            currentDateKey:currWeekArr[0]
-          })
-          
-        }
+    handleDateChoice(e){
+
+      //Get the chosen date which has become the target value
+      var chosenDate = e.target.value
+
+      //Set it as the current date 
+      this.setState({
+        currentDate: chosenDate
+      })
+
 
 
     }
@@ -93,9 +89,9 @@ class Contribution extends React.Component{
                         <Select
                         title={"Select Date"}
                         name={'date'}
-                        options = {Object.keys(this.state.dateOptions)}
-                        value = {this.state.currentDateKey}
-                        // handleChange = {this.handleString}
+                        options = {this.state.dateOptions}
+                        value = {this.state.currentDate}
+                        handleChange = {this.handleDateChoice}
                         />
                     </div>
                     <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
