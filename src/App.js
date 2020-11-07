@@ -6,7 +6,7 @@ import Contribution from './Scripts/Contribution'
 function App() {
   return (
     <div >
-      <Contribution/>
+      <Contribution userId={"MAL001"}/>
     </div>
   );
 }

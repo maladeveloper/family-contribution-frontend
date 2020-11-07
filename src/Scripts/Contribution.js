@@ -1,7 +1,7 @@
 import React from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import {getHistoryData,refreshDates} from './Variables';
+import {getDateUserSpecificData, getHistoryData,refreshDates} from './Variables';
 
 
 class Contribution extends React.Component{
@@ -11,14 +11,16 @@ class Contribution extends React.Component{
 
         //The state of class
         this.state = {
-            currentDate: null,
+            chosenDate: null,
             dateOptions: null, 
-            dateInformation: null
+            dateInformation: null, 
+            dateInfoReceived: false, 
 
         }
 
         this.updateDates = this.updateDates.bind(this); 
-        this.handleDateChoice = this.handleDateChoice.bind(this)
+        this.handleDateChoice = this.handleDateChoice.bind(this); 
+        this.setDateInformationData = this.setDateInformationData.bind(this)
 
     }
 
@@ -40,13 +42,16 @@ class Contribution extends React.Component{
         data.push(getCurrentWeek())
 
         //Then we have to ask the backend to refresh the dates
-        refreshDates(data).then(() => getHistoryData().then( refreshedData =>
+        refreshDates(data).then(() => getHistoryData().then( refreshedData =>{
          
             //Now set the state
             this.setState({
-              currentDate: getCurrentWeek(), 
+              chosenDate: getCurrentWeek(), 
               dateOptions: refreshedData
             })
+          
+          }
+          
           )
         )
       }
@@ -55,10 +60,15 @@ class Contribution extends React.Component{
 
         //Set the data in the state 
         this.setState({
-          currentDate: getCurrentWeek(), 
+          chosenDate: getCurrentWeek(), 
           dateOptions: data
         })
+
       }
+
+      //Now call to set the date information
+      this.setDateInformationData(getCurrentWeek())
+
     }
 
     handleDateChoice(e){
@@ -68,46 +78,72 @@ class Contribution extends React.Component{
 
       //Set it as the current date 
       this.setState({
-        currentDate: chosenDate
+        chosenDate: chosenDate, 
+        dateInfoReceived: false
       })
 
+      //Call to set the information
+      this.setDateInformationData(chosenDate)
 
+    }
 
+    setDateInformationData(chosenDate){
+
+      //Call for the user information and then set the state with the data
+      getDateUserSpecificData(chosenDate, this.props.userId).then(data => {
+
+          //Set the information
+          this.setState({
+            dateInformation: (data===false ? null : data),
+            dateInfoReceived: true 
+
+          })          
+        }
+      )
     }
 
     
 
     render(){
-        console.log(this.state.dateOptions)
+      
+      //The date options must be chosen and loaded in
+      if(this.state.dateOptions != null){
+
         return(
-            <div>
-                {//Check if the options have loaded 
-                this.state.dateOptions != null
-                ?
-                <div>
-                    <div>
-                        <Select
-                        title={"Select Date"}
-                        name={'date'}
-                        options = {this.state.dateOptions}
-                        value = {this.state.currentDate}
-                        handleChange = {this.handleDateChoice}
-                        />
-                    </div>
-                    <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
-                        <Tab eventKey="income-submission" title="Income Submission">
-                        <div>{getCurrentWeek()} </div>
-                        </Tab>
-                        <Tab eventKey="payment" title="Payment">
-                        <div>World</div>
-                        </Tab>
-                    </Tabs>
-                </div>
-                :
-                <div>Loading...</div>
-                }
-            </div>
+          <div>
+              <div>  
+                <Select
+                title={"Select Date"}
+                name={'date'}
+                options = {this.state.dateOptions}
+                value = {this.state.chosenDate}
+                handleChange = {this.handleDateChoice}
+                />
+              </div>
+              {this.state.dateInfoReceived
+                  ?
+                  <div> 
+                      <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
+                          <Tab eventKey="income-submission" title="Income Submission">
+                          <div>{getCurrentWeek()} </div>
+                          </Tab>
+                          <Tab eventKey="payment" title="Payment">
+                          <div>World</div>
+                          </Tab>
+                      </Tabs>
+                  </div>
+                  :
+                  <div>Loading...</div>
+              }
+
+          </div>
         )
+      }
+
+      return(
+    
+          <div>Loading...</div>
+      )
     }
 }
 

@@ -36,4 +36,21 @@ var refreshDates = function(prevDates){
                 fetch(URL, requestOptions).then(response => response.json()).then(data => resolve(data));
             })
 }
-export {getHistoryData,refreshDates}; 
+
+var getDateUserSpecificData = function(date, userId){
+
+    //Make a new promise to get the item from the lab
+    return new Promise((resolve)=>{
+
+        //Make a URL
+        const URL = BASE_URL+"getDateUserSpecificData?date="+date+"&userId="+userId; 
+
+        //Make a fetch request for the data
+        fetch(URL).then(response => response.json()).then(data => 
+            
+            //Now resolve with the data that was returned 
+            resolve(data)
+        )
+        })
+}
+export {getHistoryData,refreshDates,getDateUserSpecificData}; 

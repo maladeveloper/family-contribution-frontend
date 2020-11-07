@@ -1,0 +1,2 @@
+- First prompt the user to go through and add their system information.
+    - Then after that point to where they can 
