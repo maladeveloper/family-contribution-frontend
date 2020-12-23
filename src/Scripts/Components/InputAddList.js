@@ -65,25 +65,35 @@ class TableInput extends React.Component{
 
     constructor(props){
         super(props)
+
+        //Make a copy of the headers 
+        var headersCopy = Object.assign({}, this.props.headers);
+        
+
+        let setAll = (obj, val) => Object.keys(obj).forEach(k => obj[k] = val);
+
+        //Set all the headers to null
+        setAll(headersCopy, "")
+
+        this.state = headersCopy
+
         this.handleSubmit = this.handleSubmit.bind(this);
-        //this.handleChange = this.handleChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
     
+    handleChange(event){
 
+      this.setState({[event.target.id]: event.target.value});
+      
+    }
     handleSubmit(event) {
         event.preventDefault();
-        
-        //Get the form by id
+    
+        //The state has the information that is neccessary, thus pass this
+        console.log(this.state)
 
-        const data = []
-        console.log(event.target.elements)
-        console.log(Object.keys(event.target.elements))
-        Object.keys(event.target.elements).map((id, eventData) => {
-            data.push(event.target.elements[id].value)
-        })
+        this.props.addNewItem(this.state)
 
-        //Remove last element from the array (which is the button)
-        console.log(data);
 
       }
 
@@ -97,7 +107,7 @@ class TableInput extends React.Component{
                         return(
                             <>
                             <label>{this.props.headers[key]["disp"]}</label>
-                            <input type={this.props.headers[key]['type']} id={index} name={index}/>
+                            <input onChange={this.handleChange} type={this.props.headers[key]['type']} id={this.props.headers[key]['id']} value={this.state[this.props.headers[key]['id']]}/>
                             </>
                         )
                     })
@@ -128,11 +138,16 @@ class InputAddList extends React.Component{
         
         }
 
-        this.renderNewItem = this.renderNewItem.bind(this)
+        this.addNewItem = this.addNewItem.bind(this)
     }
 
-    renderNewItem(){
+    addNewItem(newData){
 
+      this.setState({
+        data:[...this.state.data,
+          newData]
+      });
+      
 
     }
 
@@ -150,7 +165,7 @@ class InputAddList extends React.Component{
                 <Table headers={this.props.headers} rowData ={this.state.data} /> 
             }
 
-            <center><TableInput headers={this.props.headers} rowData ={this.state.data}/></center>
+            <center><TableInput headers={this.props.headers} rowData ={this.state.data} addNewItem={this.addNewItem}/></center>
 
 
 

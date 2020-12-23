@@ -9,17 +9,17 @@ const headers = {
   "NAME":{
       "type": "text", 
       "disp": "Name",  //How this variable would be displayed to the user.
-      "id": "name"
+      "id": "NAME" // ID has to match with key name.
   }, 
-  "NUMBER":{
+  "AMOUNT":{
       "type": "number", 
       "disp": "Amount", 
-      "id": "amount"
+      "id": "AMOUNT"
   }, 
   "DATE":{
       "type":"date", 
       "disp": "Date", 
-      "id": "date"
+      "id": "DATE"
   }
 }
 
