@@ -1,23 +1,6 @@
 import React from 'react';
 import './InputAddList.css'
-const headerToInfo = {
 
-    "NAME":{
-        "type": "text", 
-        "disp": "Name",  //How this variable would be displayed to the user.
-        "id": "name"
-    }, 
-    "NUMBER":{
-        "type": "number", 
-        "disp": "Amount", 
-        "id": "amount"
-    }, 
-    "DATE":{
-        "type":"date", 
-        "disp": "Date", 
-        "id": "date"
-    }
-}
 
 const exampleInfo = [{
     "NAME": "Ghost in The Wires",
@@ -48,8 +31,8 @@ const exampleInfo = [{
     return(
         <thead className="thead-dark" key="header-1">
             <tr key="header-0">
-              {headers && headers.map((header, index) =>{
-                  return <th key={index}><div>{headerToInfo[header]["disp"]}</div></th>
+              {headers && Object.keys(headers).map((key, index) =>{
+                  return <th key={"header"+ headers[key]["id"]}><div>{headers[key]["disp"]}</div></th>
               })}
             </tr>
         </thead>
@@ -62,8 +45,8 @@ const exampleInfo = [{
     function buildRow(row, rowIndex, headers) {
         return (
             <tr key={rowIndex}>
-            { headers.map((value, index) => {
-                return <td key={index}>{row[value]}</td>
+            { Object.keys(headers).map((key, index) => {
+                return <td key={index}>{row[key]}</td>
             })}
             </tr>
         )
@@ -109,12 +92,12 @@ class TableInput extends React.Component{
             <div>
             <form id="form">
                 {
-                    this.props.headers && this.props.headers.map((header, index) =>{
+                    this.props.headers && Object.keys(this.props.headers).map((key, index) =>{
 
                         return(
                             <>
-                            <label>{headerToInfo[header]["disp"]}</label>
-                            <input type={headerToInfo[header]['type']} id={index} name={index}/>
+                            <label>{this.props.headers[key]["disp"]}</label>
+                            <input type={this.props.headers[key]['type']} id={index} name={index}/>
                             </>
                         )
                     })
@@ -136,10 +119,13 @@ class TableInput extends React.Component{
 class InputAddList extends React.Component{
 
     constructor(props){
+
         super(props);
 
         this.state = {
+
             data: exampleInfo // Change to an empty array after it has been completed.  
+        
         }
 
         this.renderNewItem = this.renderNewItem.bind(this)
