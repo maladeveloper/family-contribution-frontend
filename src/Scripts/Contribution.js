@@ -2,6 +2,7 @@ import React from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import {getDateUserSpecificData, getHistoryData,refreshDates} from './Variables';
+import IncomeSubmission from './IncomeSubmission'; 
 
 
 class Contribution extends React.Component{
@@ -125,8 +126,11 @@ class Contribution extends React.Component{
                   <div> 
                       <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
                           <Tab eventKey="income-submission" title="Income Submission">
-                          <div>{getCurrentWeek()} </div>
+                          <div><IncomeSubmission/></div>
                           </Tab>
+
+                          {//Payment tab should only pop-up after the condition that every one has submitted income.
+                          }
                           <Tab eventKey="payment" title="Payment">
                           <div>World</div>
                           </Tab>

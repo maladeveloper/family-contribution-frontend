@@ -53,4 +53,8 @@ var getDateUserSpecificData = function(date, userId){
         )
         })
 }
+
+
+
+
 export {getHistoryData,refreshDates,getDateUserSpecificData}; 
