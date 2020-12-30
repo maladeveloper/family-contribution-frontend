@@ -1,15 +1,14 @@
-import React from 'react';
 import './InputAddList.css'
-
+import React, { useState } from 'react';
 
 const exampleInfo = [{
     "NAME": "Ghost in The Wires",
-    "NUMBER": "2",
+    "AMOUNT": "2",
     "DATE": "08/15/2011"
   },
   {
     "NAME": "Console Wars",
-    "NUMBER": "4",
+    "AMOUNT": "4",
     "DATE": "05/13/2014"
   },
  ]
@@ -34,6 +33,7 @@ const exampleInfo = [{
               {headers && Object.keys(headers).map((key, index) =>{
                   return <th key={"header"+ headers[key]["id"]}><div>{headers[key]["disp"]}</div></th>
               })}
+              <th key={"remove"}><div></div></th>
             </tr>
         </thead>
     );
@@ -41,16 +41,36 @@ const exampleInfo = [{
   
   const TableBody = (props) => {
     const { headers, rowData } = props;
+    
+    //Make the state update so as to force a re-render
+    const [value, setValue] = useState(0); // integer state
 
     function buildRow(row, rowIndex, headers) {
         return (
-            <tr key={rowIndex}>
+            <tr id={rowIndex}>
             { Object.keys(headers).map((key, index) => {
+
                 return <td key={index}>{row[key]}</td>
             })}
+            <td><button id={rowIndex} onClick={removeRow} class="btn btn-danger">X</button></td>
             </tr>
         )
     };
+
+
+    function removeRow(event){
+
+      console.log(rowData)
+      //Remove the row by the index
+      var index = event.target.id
+
+      rowData.splice(index, 1)
+
+      console.log(rowData)
+
+      setValue(value => ++value); // update the state to force render
+
+    }
 
     return(
       <tbody>
@@ -84,6 +104,8 @@ class TableInput extends React.Component{
     handleChange(event){
 
       this.setState({[event.target.id]: event.target.value});
+
+      console.log(this.state)
       
     }
     handleSubmit(event) {
@@ -107,8 +129,47 @@ class TableInput extends React.Component{
                         return(
                             <>
                             <label>{this.props.headers[key]["disp"]}</label>
-                            <input onChange={this.handleChange} type={this.props.headers[key]['type']} id={this.props.headers[key]['id']} value={this.state[this.props.headers[key]['id']]}/>
+                            {
+                              
+                              //Add a datalist if the options are there (even if not read only)
+                              this.props.headers[key]['options'] != undefined
+
+                              &&
+                              <datalist id="NAME">
+                              
+                              {
+                              //Return the options that are defined
+                              }
+                              
+                              { (this.props.headers[key]['options']['array']).map((value, index) => {
+                                      return <option key={index} value={value}>{value}</option>
+                                  })}
+                                
+                              
+                              </datalist>
+                            }
+                            { //Determine whther this input has a read only or can be changed
+                              !this.props.headers[key]['readOnly']
+
+                              ?
+                              <input onChange={this.handleChange} type={this.props.headers[key]['type']} id={this.props.headers[key]['id']} value={this.state[this.props.headers[key]['id']]}
+                              list={this.props.headers[key]['id']} 
+                              />
+                              
+                              :
+                              <select value={this.state[this.props.headers[key]['id']]} onChange={this.handleChange} id={this.props.headers[key]['id']}>
+                                
+                                {
+                                //Return the options that are defined
+                                }
+                                 { (this.props.headers[key]['options']['array']).map((value, index) => {
+                                      return <option key={index} value={value}>{value}</option>
+                                  })}
+                                
+                              </select>
+                            }
                             </>
+                            
                         )
                     })
                 }
@@ -148,7 +209,6 @@ class InputAddList extends React.Component{
           newData]
       });
       
-
     }
 
 
@@ -160,7 +220,7 @@ class InputAddList extends React.Component{
             
             {
             //Show the table only if something exists in it.
-            this.state.data.length > 1
+            this.state.data.length > 0
                 &&
                 <Table headers={this.props.headers} rowData ={this.state.data} /> 
             }

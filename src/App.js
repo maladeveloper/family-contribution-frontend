@@ -9,7 +9,12 @@ const headers = {
   "NAME":{
       "type": "text", 
       "disp": "Name",  //How this variable would be displayed to the user.
-      "id": "NAME" // ID has to match with key name.
+      "id": "NAME", // ID has to match with key name.
+      "readOnly": true,//If modifications can be made on input array
+      "options": {
+        "array":['Bosch', 'VCAA', 'Tutoring', 'Other'], //Must be here if readonly is true
+        
+      }
   }, 
   "AMOUNT":{
       "type": "number", 
