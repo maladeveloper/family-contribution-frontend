@@ -152,21 +152,33 @@ class TableInput extends React.Component{
                               !this.props.headers[key]['readOnly']
 
                               ?
-                              <input onChange={this.handleChange} type={this.props.headers[key]['type']} id={this.props.headers[key]['id']} value={this.state[this.props.headers[key]['id']]}
-                              list={this.props.headers[key]['id']} 
-                              />
+                              //Determine max and min date
+                                (
+                                this.props.headers[key]["dateInfo"] != undefined
+                                
+                                ?
+                                <input onChange={this.handleChange} type={this.props.headers[key]['type']} id={this.props.headers[key]['id']} value={this.state[this.props.headers[key]['id']]}
+                                list={this.props.headers[key]['id']} min={this.props.headers[key]["dateInfo"]["minDate"]} max={this.props.headers[key]["dateInfo"]["maxDate"]}
+                                />
+                                
+                                :
+                                
+                                <input onChange={this.handleChange} type={this.props.headers[key]['type']} id={this.props.headers[key]['id']} value={this.state[this.props.headers[key]['id']]}
+                                list={this.props.headers[key]['id']} 
+                                />
+                                )
                               
                               :
-                              <select value={this.state[this.props.headers[key]['id']]} onChange={this.handleChange} id={this.props.headers[key]['id']}>
-                                
-                                {
-                                //Return the options that are defined
-                                }
-                                 { (this.props.headers[key]['options']['array']).map((value, index) => {
-                                      return <option key={index} value={value}>{value}</option>
-                                  })}
-                                
-                              </select>
+                                <select value={this.state[this.props.headers[key]['id']]} onChange={this.handleChange} id={this.props.headers[key]['id']}>
+                                  
+                                  {
+                                  //Return the options that are defined
+                                  }
+                                  { (this.props.headers[key]['options']['array']).map((value, index) => {
+                                        return <option key={index} value={value}>{value}</option>
+                                    })}
+                                  
+                                </select>
                             }
                             </>
                             
@@ -177,6 +189,7 @@ class TableInput extends React.Component{
                 
                              
             </form>
+            <br></br>
             <button onClick={this.handleSubmit} class="btn btn-info">Add</button> 
         
             
@@ -193,9 +206,19 @@ class InputAddList extends React.Component{
 
         super(props);
 
-        this.state = {
+        //Set it as an empty array or the props dataArray if defined
+        if(this.props.dataArray != undefined){
+          
+          this.state = {
+            data: this.props.dataArray // Change to an empty array after it has been completed.  
+          }
 
-            data: exampleInfo // Change to an empty array after it has been completed.  
+        }
+        else{
+
+          this.state = {
+            data: []
+          }
         
         }
 
@@ -217,7 +240,8 @@ class InputAddList extends React.Component{
         return(
             
           <div >
-            
+            <center><TableInput headers={this.props.headers} rowData ={this.state.data} addNewItem={this.addNewItem}/></center>
+            <br></br>
             {
             //Show the table only if something exists in it.
             this.state.data.length > 0
@@ -225,7 +249,6 @@ class InputAddList extends React.Component{
                 <Table headers={this.props.headers} rowData ={this.state.data} /> 
             }
 
-            <center><TableInput headers={this.props.headers} rowData ={this.state.data} addNewItem={this.addNewItem}/></center>
 
 
 

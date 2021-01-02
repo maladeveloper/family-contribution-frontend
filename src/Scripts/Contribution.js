@@ -180,7 +180,7 @@ function getPreviousMonday()
 function getFollowingSunday(){
 
     var follSunday = new Date(); 
-    follSunday.setDate(follSunday.getDate() + (7 + 0 - follSunday.getDay()) % 7);
+    follSunday.setDate(follSunday.getDate() + (14 + 0 - follSunday.getDay()) % 14);
 
     //Change it to the acceptable format
     var dd = String(follSunday.getDate()).padStart(2, '0');
