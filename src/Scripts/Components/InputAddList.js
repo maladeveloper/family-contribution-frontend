@@ -231,6 +231,12 @@ class InputAddList extends React.Component{
         data:[...this.state.data,
           newData]
       });
+
+      //Call the parent if it wants to handle this data 
+      if(this.props.parentOutput){
+
+        this.props.parentOutput([...this.state.data,newData])
+      }
       
     }
 

@@ -11,8 +11,11 @@ class IncomeSubmission extends React.Component{
 
         //Make a state with the info about income data
         this.state = {
-            incomeDateData: null
+            incomeDateData: null,
+            totalIncome: 0,
         }
+
+        this.handleInputChange = this.handleInputChange.bind(this)
 
     }
 
@@ -26,6 +29,23 @@ class IncomeSubmission extends React.Component{
 
     }
 
+    handleInputChange(dataReceived){
+        console.log(dataReceived)
+
+        var sum = 0 
+
+        dataReceived.forEach((item, index) =>{
+
+            sum += Number(item["AMOUNT"])
+        })
+
+        this.setState({
+            totalIncome: sum
+        })
+        
+
+    }
+
     render(){
 
         //Need to pass in the jobs of the person and the dates
@@ -34,9 +54,13 @@ class IncomeSubmission extends React.Component{
         headerInfo["NAME"]["options"]["array"] = this.props.userInfo.jobs;
     
         return(
+            <div>
+                <p>{this.state.totalIncome}</p>
             
             <div class="income-box">
-                <InputAddList headers={headerInfo}/>
+                <InputAddList headers={headerInfo} parentOutput={this.handleInputChange}/>
+            </div>
+
             </div>
         )
     }
