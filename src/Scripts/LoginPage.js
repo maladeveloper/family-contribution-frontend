@@ -1,6 +1,9 @@
 import React from 'react';
 import Contribution from './Contribution'
-
+import { connect } from "react-redux";
+import {UPDATEUSERINFO} from "./Redux/Actions"; 
+import {getUserInfo} from "./Variables";
+import {webFuncInteraction, backendWebVars} from "./BackendIneterface";
 
 class LoginPage extends React.Component{
 
@@ -9,24 +12,35 @@ class LoginPage extends React.Component{
 
         this.state = {
             //loggedOnUserId: null 
-            loggedOnUserId: "MAL001" //FOR NOW LETS ASSUME USER PUT THIS AS ID
+            loggedOnUserId: "MAL001", //FOR NOW LETS ASSUME USER PUT THIS AS ID (later make a login page)
+            logOnSuccess: false, 
         }
 
-        
+        //FOR NOW DISPATCH GETTING THE USER INFO
+        webFuncInteraction(backendWebVars.USER_INFO, {userId:"MAL001"}).then(data => this.updateLogonStatus(data))
+
+        this.updateLogonStatus = this.updateLogonStatus.bind(this); 
 
     }
 
+    updateLogonStatus(data){
+
+        this.props.UPDATEUSERINFO(data)
+
+        this.setState({logOnSuccess: true})
+
+    }
 
 
     render(){
         return(
             <div>
             {
-            this.state.loggedOnUserId != null 
+            this.state.logOnSuccess
 
             ?
                 <div>
-                    <Contribution/>
+                    <Contribution userId={this.state.loggedOnUserId}/>
                 </div>
 
             :
@@ -38,4 +52,6 @@ class LoginPage extends React.Component{
     }
 
 }
-export default LoginPage;
+
+
+export default connect(null, {UPDATEUSERINFO})(LoginPage);

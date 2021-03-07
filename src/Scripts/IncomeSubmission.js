@@ -1,6 +1,7 @@
 import React from 'react';
-import {getDateUserSpecificData} from './Variables';
 import InputAddList from './Components/InputAddList'; 
+import {getUserInfo} from './Redux/Selectors'; 
+import { connect } from "react-redux";
 
 
 class IncomeSubmission extends React.Component{
@@ -26,11 +27,16 @@ class IncomeSubmission extends React.Component{
     }
 
     render(){
+
+        //Need to pass in the jobs of the person and the dates
+        var headerInfo = headers; 
+
+        headerInfo["NAME"]["options"]["array"] = this.props.userInfo.jobs;
     
         return(
             
             <div class="income-box">
-                <InputAddList headers={headers}/>
+                <InputAddList headers={headerInfo}/>
             </div>
         )
     }
@@ -38,7 +44,6 @@ class IncomeSubmission extends React.Component{
 
 
 }
-export default IncomeSubmission;
 
 
 //This header list is what is passed in by the parent (delete after)
@@ -69,3 +74,6 @@ const headers = {
         }
     }
   }
+
+  //Connect this component to store
+export default connect(state => ( { userInfo: getUserInfo(state)} ))(IncomeSubmission);

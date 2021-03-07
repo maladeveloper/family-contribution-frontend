@@ -1,8 +1,8 @@
 import React from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import {getDateUserSpecificData, getHistoryData,refreshDates} from './Variables';
 import IncomeSubmission from './IncomeSubmission'; 
+import {webFuncInteraction, backendWebVars} from "./BackendIneterface";
 
 
 class Contribution extends React.Component{
@@ -21,15 +21,15 @@ class Contribution extends React.Component{
 
         this.updateDates = this.updateDates.bind(this); 
         this.handleDateChoice = this.handleDateChoice.bind(this); 
-        this.setDateInformationData = this.setDateInformationData.bind(this)
+        this.setDateInformationData = this.setDateInformationData.bind(this); 
 
     }
 
     componentDidMount(){
       
-      //Call fore the dates data to be set
-      getHistoryData().then(data =>this.updateDates(data))
-        
+      //Call fore the dates data to be set      
+      webFuncInteraction(backendWebVars.PREV_DATES, {}).then(data =>this.updateDates(data))
+
   
 
     }
@@ -43,7 +43,7 @@ class Contribution extends React.Component{
         data.push(getCurrentWeek())
 
         //Then we have to ask the backend to refresh the dates
-        refreshDates(data).then(() => getHistoryData().then( refreshedData =>{
+        webFuncInteraction(backendWebVars.REF_DATES, {prevDates:data}).then(() => webFuncInteraction(backendWebVars.PREV_DATES, {}).then( refreshedData =>{
          
             //Now set the state
             this.setState({
@@ -91,7 +91,8 @@ class Contribution extends React.Component{
     setDateInformationData(chosenDate){
 
       //Call for the user information and then set the state with the data
-      getDateUserSpecificData(chosenDate, this.props.userId).then(data => {
+      
+      webFuncInteraction(backendWebVars.USER_SPEC_DATA,{date:chosenDate, userId:this.props.userId}).then(data => {
 
           //Set the information
           this.setState({
@@ -106,7 +107,6 @@ class Contribution extends React.Component{
     
 
     render(){
-      
       //The date options must be chosen and loaded in
       if(this.state.dateOptions != null){
 
@@ -131,7 +131,7 @@ class Contribution extends React.Component{
 
                           {//Payment tab should only pop-up after the condition that every one has submitted income.
                           }
-                          <Tab eventKey="payment" title="Payment">
+                          <Tab eventKey="payment" title="Payment Summary">
                           <div>World</div>
                           </Tab>
                       </Tabs>
@@ -220,4 +220,4 @@ const Select = props => {
   };
 
 
-export default Contribution;
+export default Contribution; 
