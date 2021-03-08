@@ -24,13 +24,6 @@ export var backendWebVars = {
         URL: (argObject) =>BASE_URL+"getUserInfo?userId="+ argObject.userId
     },
 
-    REF_DATES:{
-        method: "POST", 
-        URL:(argObject) => BASE_URL + "refreshDates",
-        bodyInfo: (argObject) => JSON.stringify({info: argObject.prevDates}),
-    },
-
-
     
 
 }

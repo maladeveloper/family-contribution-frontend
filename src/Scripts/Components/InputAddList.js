@@ -14,12 +14,12 @@ const exampleInfo = [{
  ]
 
   const Table = (props) => {
-    const { headers, rowData } = props;
+    const { headers, rowData, parentRowUpdate } = props;
     return (
       <div>
         <table className="table table-bordered table-hover">
         <TableHeader headers={headers}></TableHeader>
-        <TableBody headers={headers} rowData={rowData}></TableBody>
+        <TableBody headers={headers} rowData={rowData} parentRowUpdate={parentRowUpdate}></TableBody>
         </table>
       </div>
     );
@@ -40,12 +40,12 @@ const exampleInfo = [{
   }
   
   const TableBody = (props) => {
-    const { headers, rowData } = props;
+    const { headers, rowData, parentRowUpdate } = props;
     
     //Make the state update so as to force a re-render
     const [value, setValue] = useState(0); // integer state
 
-    function buildRow(row, rowIndex, headers) {
+    function buildRow(row, rowIndex, headers, parentRowUpdate) {
         return (
             <tr id={rowIndex}>
             { Object.keys(headers).map((key, index) => {
@@ -75,7 +75,7 @@ const exampleInfo = [{
     return(
       <tbody>
         { rowData && rowData.map((value, index) => {
-                return buildRow(value,index, headers);
+                return buildRow(value,index, headers, parentRowUpdate);
             })}
       </tbody>
   );
@@ -108,6 +108,7 @@ class TableInput extends React.Component{
       console.log(this.state)
       
     }
+
     handleSubmit(event) {
         event.preventDefault();
     
@@ -223,6 +224,7 @@ class InputAddList extends React.Component{
         }
 
         this.addNewItem = this.addNewItem.bind(this)
+        this.removeItem = this.removeItem.bind(this)
     }
 
     addNewItem(newData){
@@ -235,9 +237,19 @@ class InputAddList extends React.Component{
       //Call the parent if it wants to handle this data 
       if(this.props.parentOutput){
 
-        this.props.parentOutput([...this.state.data,newData])
+        this.props.parentOutput([...this.state.data, newData])
       }
       
+    }
+
+    removeItem(updatedRows){
+
+      //Call the parent if it wants to handle this data 
+      if(this.props.parentOutput){
+
+        this.props.parentOutput([updatedRows])
+      }
+
     }
 
 
@@ -252,7 +264,7 @@ class InputAddList extends React.Component{
             //Show the table only if something exists in it.
             this.state.data.length > 0
                 &&
-                <Table headers={this.props.headers} rowData ={this.state.data} /> 
+                <Table headers={this.props.headers} rowData ={this.state.data} parentRowUpdate={this.state.removeItem} /> 
             }
 
 
