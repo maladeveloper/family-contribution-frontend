@@ -1,5 +1,5 @@
-const BASE_URL = 'https://family-contribution-backend.herokuapp.com/'
-
+//const BASE_URL = 'https://family-contribution-backend.herokuapp.com/'
+const BASE_URL = "http://127.0.0.1:5000/"
 
 var requestOptions = {
     method: 'POST', 
@@ -24,6 +24,11 @@ export var backendWebVars = {
         URL: (argObject) =>BASE_URL+"getUserInfo?userId="+ argObject.userId
     },
 
+    UPDATE_INCOME:{
+        method: "POST",
+        URL:(argObject) => BASE_URL + "updateIncomeSubmission"
+    }
+
     
 
 }
@@ -32,7 +37,6 @@ export var webFuncInteraction = (backendWebVar, argObject) =>{
 
     return new Promise((resolve)=>{
 
-        console.log(backendWebVar.method)
         switch(backendWebVar.method){
 
             case "GET":
@@ -52,10 +56,11 @@ export var webFuncInteraction = (backendWebVar, argObject) =>{
             case "POST":
 
             {
+                console.log(argObject)
                 
                 var requestOptionsVar = requestOptions;
 
-                requestOptionsVar.body = backendWebVar.bodyInfo(argObject);
+                requestOptionsVar.body = argObject;
 
                 fetch(backendWebVar.URL(argObject), requestOptionsVar).then(response => response.json()).then(data => resolve(data));
                 

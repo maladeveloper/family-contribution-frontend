@@ -2,6 +2,7 @@ import React from 'react';
 import Contribution from './Contribution'
 import { connect } from "react-redux";
 import {UPDATEUSERINFO} from "./Redux/Actions"; 
+import {UPDATEUSERID} from "./Redux/Actions";
 import {getUserInfo} from "./Variables";
 import {webFuncInteraction, backendWebVars} from "./BackendIneterface";
 
@@ -26,6 +27,8 @@ class LoginPage extends React.Component{
     updateLogonStatus(data){
 
         this.props.UPDATEUSERINFO(data)
+
+        this.props.UPDATEUSERID(this.state.loggedOnUserId)
 
         this.setState({logOnSuccess: true})
 
@@ -54,4 +57,4 @@ class LoginPage extends React.Component{
 }
 
 
-export default connect(null, {UPDATEUSERINFO})(LoginPage);
+export default connect(null, {UPDATEUSERINFO, UPDATEUSERID})(LoginPage);

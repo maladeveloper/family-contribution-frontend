@@ -46,7 +46,6 @@ class Contribution extends React.Component{
       })
 
       //Call for the user information and then set the state with the data
-
       webFuncInteraction(backendWebVars.USER_SPEC_DATA,{date:chosenDate, userId:this.props.userId}).then(data => {
 
         //Set the information
@@ -82,7 +81,7 @@ class Contribution extends React.Component{
                   <div> 
                       <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
                           <Tab eventKey="income-submission" title="Income Submission">
-                          <div><IncomeSubmission/></div>
+                          <div><IncomeSubmission chosenDate={this.state.chosenDate}/></div>
                           </Tab>
 
                           {//Payment tab should only pop-up after the condition that every one has submitted income.

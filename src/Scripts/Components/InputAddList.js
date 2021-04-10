@@ -1,89 +1,132 @@
 import './InputAddList.css'
 import React, { useState } from 'react';
+import {getUserInfo} from '../Redux/Selectors'; 
+import { connect } from "react-redux";
 
-const exampleInfo = [{
-    "NAME": "Ghost in The Wires",
-    "AMOUNT": "2",
-    "DATE": "08/15/2011"
-  },
-  {
-    "NAME": "Console Wars",
-    "AMOUNT": "4",
-    "DATE": "05/13/2014"
-  },
- ]
+
 
   const Table = (props) => {
-    const { headers, rowData, parentRowUpdate } = props;
+    const { headers, rowData, updateSum } = props;
+ 
     return (
       <div>
+        
         <table className="table table-bordered table-hover">
+        
         <TableHeader headers={headers}></TableHeader>
-        <TableBody headers={headers} rowData={rowData} parentRowUpdate={parentRowUpdate}></TableBody>
+        
+        <TableBody headers={headers} rowData={rowData} updateSum={updateSum} ></TableBody>
+        
         </table>
+      
       </div>
     );
   }
   
   const TableHeader = (props) => {
+    
     const { headers } = props;
+    
     return(
+        
         <thead className="thead-dark" key="header-1">
+
             <tr key="header-0">
+
               {headers && Object.keys(headers).map((key, index) =>{
+                  
                   return <th key={"header"+ headers[key]["id"]}><div>{headers[key]["disp"]}</div></th>
+              
               })}
+              
               <th key={"remove"}><div></div></th>
+            
             </tr>
+        
         </thead>
     );
   }
   
-  const TableBody = (props) => {
-    const { headers, rowData, parentRowUpdate } = props;
-    
-    //Make the state update so as to force a re-render
-    const [value, setValue] = useState(0); // integer state
 
-    function buildRow(row, rowIndex, headers, parentRowUpdate) {
-        return (
-            <tr id={rowIndex}>
-            { Object.keys(headers).map((key, index) => {
+class TableBody extends React.Component{
 
-                return <td key={index}>{row[key]}</td>
-            })}
-            <td><button id={rowIndex} onClick={removeRow} class="btn btn-danger">X</button></td>
-            </tr>
-        )
+  constructor(props){
+
+    super(props)
+
+    this.state={"removeVal":0, sum:0}
+
+    this.buildRow = this.buildRow.bind(this)
+
+    this.removeRow = this.removeRow.bind(this)
+
+  }
+
+  removeRow(event){
+
+    var index = event.target.id      
+
+    this.props.rowData.splice(index, 1)
+
+    this.setState(prevState => {
+      return {
+      "removeVal": prevState.removeVal + 1 
+    }})
+
+  }
+
+
+  buildRow(row, rowIndex, headers) {
+
+    return (
+        <tr id={rowIndex}>
+        
+        { Object.keys(headers).map((key, index) => {
+
+            return <td key={index}>{row[key]}</td>
+        })}
+        
+        <td>
+          
+          <button id={rowIndex} onClick={this.removeRow} class="btn btn-danger">X</button>
+        
+        </td>
+        
+        </tr>
+    )
     };
 
+  render(){
 
-    function removeRow(event){
+    var sum = 0
 
-      console.log(rowData)
-      //Remove the row by the index
-      var index = event.target.id
+    this.props.rowData.forEach((value) =>{
 
-      rowData.splice(index, 1)
+      sum += parseInt( value["AMOUNT"])
 
-      console.log(rowData)
+    })
 
-      setValue(value => ++value); // update the state to force render
-
-    }
+    this.props.updateSum(sum)
 
     return(
+      
       <tbody>
-        { rowData && rowData.map((value, index) => {
-                return buildRow(value,index, headers, parentRowUpdate);
-            })}
+      
+        { this.props.rowData && this.props.rowData.map((value, index) => {
+                return this.buildRow(value,index, this.props.headers);
+      
+        })}
+      
       </tbody>
-  );
+    );
+
   }
+}
 
 class TableInput extends React.Component{
 
     constructor(props){
+
         super(props)
 
         //Make a copy of the headers 
@@ -191,7 +234,8 @@ class TableInput extends React.Component{
                              
             </form>
             <br></br>
-            <button onClick={this.handleSubmit} class="btn btn-info">Add</button> 
+            <button  onClick={this.handleSubmit} class="btn btn-info">Add</button>
+            
         
             
             </div>
@@ -213,21 +257,27 @@ class InputAddList extends React.Component{
           this.state = {
             data: this.props.dataArray // Change to an empty array after it has been completed.  
           }
-
         }
+        
         else{
 
           this.state = {
             data: []
           }
-        
         }
+        
+        this.addNewRow = this.addNewRow.bind(this)
 
-        this.addNewItem = this.addNewItem.bind(this)
-        this.removeItem = this.removeItem.bind(this)
+        this.sendIt = this.sendIt.bind(this);
     }
 
-    addNewItem(newData){
+    sendIt(){
+
+      this.props.updateIncomeDatabase(this.state.data)
+      
+    }
+
+    addNewRow(newData){
 
       this.setState({
         data:[...this.state.data,
@@ -242,34 +292,23 @@ class InputAddList extends React.Component{
       
     }
 
-    removeItem(updatedRows){
-
-      //Call the parent if it wants to handle this data 
-      if(this.props.parentOutput){
-
-        this.props.parentOutput([updatedRows])
-      }
-
-    }
-
-
     render (){
-    
+        
         return(
             
           <div >
-            <center><TableInput headers={this.props.headers} rowData ={this.state.data} addNewItem={this.addNewItem}/></center>
+            <center><TableInput headers={this.props.headers} rowData ={this.state.data} addNewItem={this.addNewRow}/></center>
             <br></br>
             {
             //Show the table only if something exists in it.
             this.state.data.length > 0
                 &&
-                <Table headers={this.props.headers} rowData ={this.state.data} parentRowUpdate={this.state.removeItem} /> 
+                <>
+                <Table headers={this.props.headers} rowData ={this.state.data} updateSum={this.props.updateSum}  /> 
+
+                <center><button onClick={this.sendIt} class="btn btn-success">Submit</button></center> 
+                </>
             }
-
-
-
-
           </div>
         
         )
