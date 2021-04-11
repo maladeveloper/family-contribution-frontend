@@ -141,6 +141,7 @@ class TableInput extends React.Component{
         this.state = headersCopy
 
         this.handleSubmit = this.handleSubmit.bind(this);
+
         this.handleChange = this.handleChange.bind(this);
     }
     
@@ -148,20 +149,14 @@ class TableInput extends React.Component{
 
       this.setState({[event.target.id]: event.target.value});
 
-      console.log(this.state)
-      
     }
 
     handleSubmit(event) {
-        event.preventDefault();
-    
-        //The state has the information that is neccessary, thus pass this
-        console.log(this.state)
+        
+      event.preventDefault();
 
-        this.props.addNewItem(this.state)
-
-
-      }
+      this.props.addNewItem(this.state)
+    }
 
     render(){
         return(
@@ -214,6 +209,7 @@ class TableInput extends React.Component{
                               
                               :
                                 <select value={this.state[this.props.headers[key]['id']]} onChange={this.handleChange} id={this.props.headers[key]['id']}>
+                                  <option style={{"display":"none"}}></option>
                                   
                                   {
                                   //Return the options that are defined
@@ -252,10 +248,10 @@ class InputAddList extends React.Component{
         super(props);
 
         //Set it as an empty array or the props dataArray if defined
-        if(this.props.dataArray != undefined){
+        if(this.props.prevData != null){
           
           this.state = {
-            data: this.props.dataArray // Change to an empty array after it has been completed.  
+            data: this.props.prevData // Change to an empty array after it has been completed.  
           }
         }
         
@@ -279,15 +275,32 @@ class InputAddList extends React.Component{
 
     addNewRow(newData){
 
-      this.setState({
-        data:[...this.state.data,
-          newData]
-      });
+      //Find if there are headers with no values to them.
+      var noValHeaders = []
+      
+      Object.entries(newData).forEach((value) => {
 
-      //Call the parent if it wants to handle this data 
-      if(this.props.parentOutput){
+        if (value[1].length == 0){
 
-        this.props.parentOutput([...this.state.data, newData])
+          noValHeaders.push(value[0])
+        }
+      })
+
+      //Only add row if all headers have a value - otherwise tell user.
+      if (noValHeaders.length === 0){
+
+        var mergedData = mergeRows(this.props.headers, this.state.data, newData)
+
+        this.setState({
+          data:mergedData
+        });
+
+      }else{
+
+        var missingVals = noValHeaders.join(", ")
+
+        alert("Missing Values -"+ missingVals+ "\nData will not be added !")
+
       }
       
     }
@@ -314,5 +327,29 @@ class InputAddList extends React.Component{
         )
     }
 }
+
+function mergeRows(headers, currentRows, newRow){
+
+  for(const header in headers){
+
+    var headerInfo = headers[header]
+
+    //If the header values are unique, we need to merged with other rows to avoid duplication.
+    if (headerInfo["unique"]){
+
+      
+      var newRows = currentRows.filter( oldRow => oldRow[header]!== newRow[header]) // Remove the old row
+
+      newRows.push(newRow)
+
+      return newRows
+    }
+  }
+  currentRows.push(newRow)
+
+  return currentRows
+}
+
+
 
 export default InputAddList;

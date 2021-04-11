@@ -55,9 +55,7 @@ export var webFuncInteraction = (backendWebVar, argObject) =>{
             
             case "POST":
 
-            {
-                console.log(argObject)
-                
+            {                
                 var requestOptionsVar = requestOptions;
 
                 requestOptionsVar.body = JSON.stringify(argObject);

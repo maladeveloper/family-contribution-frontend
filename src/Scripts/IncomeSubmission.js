@@ -40,10 +40,6 @@ class IncomeSubmission extends React.Component{
 
     updateIncomeDatabase(dataToSend){
 
-        console.log(dataToSend)
-
-        console.log(this.props.userId)
-
         var argObject = {incomeArray:dataToSend, userId:this.props.userId, chosenDate:this.props.chosenDate }
 
         webFuncInteraction(backendWebVars["UPDATE_INCOME"], argObject)
@@ -71,7 +67,7 @@ class IncomeSubmission extends React.Component{
                 </div>
             
                 <div class="income-box">
-                    <InputAddList headers={headerInfo} updateIncomeDatabase={this.updateIncomeDatabase} updateSum={this.updateSum}/>
+                    <InputAddList headers={headerInfo} updateIncomeDatabase={this.updateIncomeDatabase} updateSum={this.updateSum} prevData={this.props.prevData}/>
                 </div>
 
             </div>
@@ -92,14 +88,15 @@ const headers = {
         "id": "NAME",  //ID has to match with key name.
         "readOnly": true, //If modifications can be made on input array
         "options": {
-          "array":['Bosch', 'VCAA', 'Tutoring', 'Other'], //Must be here if readonly is true
-          
-        }
+          "array": null , //Must be here if readonly is true
+        },
+        "unique": true // Whether this field must be unique in the entire table - this can only be the case for ONE field. 
     }, 
     "AMOUNT":{
         "type": "number", 
         "disp": "Amount ($)", 
-        "id": "AMOUNT"
+        "id": "AMOUNT",
+        "unique": false
     }, 
     "DATE":{
         "type":"date", 
@@ -108,7 +105,8 @@ const headers = {
         "dateInfo": { // This date information is needed to restrict dates.
           "minDate": null, //Need to pass in these dates through the input
           "maxDate": null
-        }
+        },
+        "unique": false
     }
   }
 

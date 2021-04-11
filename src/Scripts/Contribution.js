@@ -29,8 +29,6 @@ class Contribution extends React.Component{
       //Call for the dates data to be set      
       webFuncInteraction(backendWebVars.PREV_DATES, {}).then(data =>this.setState({dateOptions:data}))
 
-  
-
     }
     
 
@@ -56,7 +54,6 @@ class Contribution extends React.Component{
         })          
       }) 
 
-      console.log(this.state.dateInformation)
     }
 
 
@@ -82,7 +79,7 @@ class Contribution extends React.Component{
                   <div> 
                       <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
                           <Tab eventKey="income-submission" title="Income Submission">
-                          <div><IncomeSubmission chosenDate={this.state.chosenDate}/></div>
+                          <div><IncomeSubmission chosenDate={this.state.chosenDate} prevData={this.state.dateInformation}/></div>
                           </Tab>
 
                           {//Payment tab should only pop-up after the condition that every one has submitted income.
