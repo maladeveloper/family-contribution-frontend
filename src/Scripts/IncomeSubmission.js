@@ -1,8 +1,10 @@
 import React from 'react';
 import InputAddList from './Components/InputAddList'; 
 import {getUserInfo, getUserId} from './Redux/Selectors'; 
+import {DATE_INTERNAL_SEP, DATE_SEP} from './Variables';
 import { connect } from "react-redux";
 import {webFuncInteraction, backendWebVars} from "./BackendIneterface";
+import FormImpl from 'react-bootstrap/esm/Form';
 
 
 class IncomeSubmission extends React.Component{
@@ -42,7 +44,7 @@ class IncomeSubmission extends React.Component{
 
         console.log(this.props.userId)
 
-        var argObject = {incomeArray:dataToSend, userId:this.props.userId}
+        var argObject = {incomeArray:dataToSend, userId:this.props.userId, chosenDate:this.props.chosenDate }
 
         webFuncInteraction(backendWebVars["UPDATE_INCOME"], argObject)
 
@@ -56,6 +58,10 @@ class IncomeSubmission extends React.Component{
         var headerInfo = headers; 
 
         headerInfo["NAME"]["options"]["array"] = this.props.userInfo.jobs;
+
+        headerInfo["DATE"]["dateInfo"]["minDate"] = formatDateString(this.props.chosenDate.split(DATE_SEP)[0])
+
+        headerInfo["DATE"]["dateInfo"]["maxDate"] = formatDateString(this.props.chosenDate.split(DATE_SEP)[1])
     
         return(
             <div>
@@ -100,11 +106,18 @@ const headers = {
         "disp": "Date", 
         "id": "DATE",
         "dateInfo": { // This date information is needed to restrict dates.
-          "minDate":"2013-10-01", //Need to pass in these dates through the input
-          "maxDate": "2013-10-20"
+          "minDate": null, //Need to pass in these dates through the input
+          "maxDate": null
         }
     }
   }
+
+function formatDateString(dateStr){
+
+    return (dateStr.split(DATE_INTERNAL_SEP)).reverse().join("-")
+
+
+}
 
   //Connect this component to store
 export default connect(state => ( { userInfo: getUserInfo(state), userId:getUserId(state)} ))(IncomeSubmission);

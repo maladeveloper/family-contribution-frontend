@@ -56,6 +56,7 @@ class Contribution extends React.Component{
         })          
       }) 
 
+      console.log(this.state.dateInformation)
     }
 
 

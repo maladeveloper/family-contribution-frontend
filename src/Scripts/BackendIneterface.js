@@ -60,7 +60,7 @@ export var webFuncInteraction = (backendWebVar, argObject) =>{
                 
                 var requestOptionsVar = requestOptions;
 
-                requestOptionsVar.body = argObject;
+                requestOptionsVar.body = JSON.stringify(argObject);
 
                 fetch(backendWebVar.URL(argObject), requestOptionsVar).then(response => response.json()).then(data => resolve(data));
                 

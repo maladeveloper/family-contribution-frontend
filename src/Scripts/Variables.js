@@ -1,8 +1,9 @@
 
 const BASE_URL = 'https://family-contribution-backend.herokuapp.com/'
 
+export const DATE_INTERNAL_SEP = "/"
 
-
+export const DATE_SEP = "-"
 
 
 // var getData = (getDataId, argObject) =>{
