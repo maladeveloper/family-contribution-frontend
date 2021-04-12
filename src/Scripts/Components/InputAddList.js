@@ -250,11 +250,11 @@ class InputAddList extends React.Component{
         super(props);
 
         //Set it as an empty array or the props dataArray if defined
-        if(this.props.prevData != null){
+        if(this.props.prevData){
           
           this.state = {
             data: this.props.prevData, // Change to an empty array after it has been completed.
-            submitted: false
+            submitted: (this.props.prevData.length > 0) ? true : false
           }
         }
         
@@ -325,11 +325,7 @@ class InputAddList extends React.Component{
           <div >
             <center><TableInput submissionStatus={this.state.submitted} headers={this.props.headers} rowData ={this.state.data} addNewItem={this.addNewRow}/></center>
             <br></br>
-            {
-            //Show the table only if something exists in it.
-            this.state.data.length > 0
-                &&
-                [<>
+<>
                 <Table  submissionStatus={this.state.submitted} headers={this.props.headers} rowData ={this.state.data} updateSum={this.props.updateSum}  /> 
 
                 <center>
@@ -343,8 +339,8 @@ class InputAddList extends React.Component{
                   }
                 </center> 
                 </>
-                ]
-            }
+                
+            
           </div>
         
         )
@@ -353,6 +349,7 @@ class InputAddList extends React.Component{
 
 function mergeRows(headers, currentRows, newRow){
 
+  console.log(currentRows)
   for(const header in headers){
 
     var headerInfo = headers[header]
