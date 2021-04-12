@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 
 
   const Table = (props) => {
-    const { headers, rowData, updateSum } = props;
+    const { submissionStatus, headers, rowData, updateSum} = props;
  
     return (
       <div>
@@ -15,7 +15,7 @@ import { connect } from "react-redux";
         
         <TableHeader headers={headers}></TableHeader>
         
-        <TableBody headers={headers} rowData={rowData} updateSum={updateSum} ></TableBody>
+        <TableBody submissionStatus={submissionStatus} headers={headers} rowData={rowData} updateSum={updateSum} ></TableBody>
         
         </table>
       
@@ -59,6 +59,8 @@ class TableBody extends React.Component{
     this.buildRow = this.buildRow.bind(this)
 
     this.removeRow = this.removeRow.bind(this)
+    
+    
 
   }
 
@@ -88,7 +90,7 @@ class TableBody extends React.Component{
         
         <td>
           
-          <button id={rowIndex} onClick={this.removeRow} class="btn btn-danger">X</button>
+          <button id={rowIndex} disabled={this.props.submissionStatus} onClick={this.removeRow} class="btn btn-danger">X</button>
         
         </td>
         
@@ -230,7 +232,7 @@ class TableInput extends React.Component{
                              
             </form>
             <br></br>
-            <button  onClick={this.handleSubmit} class="btn btn-info">Add</button>
+            <button  onClick={this.handleSubmit} disabled={this.props.submissionStatus} class="btn btn-info">Add</button>
             
         
             
@@ -251,7 +253,8 @@ class InputAddList extends React.Component{
         if(this.props.prevData != null){
           
           this.state = {
-            data: this.props.prevData // Change to an empty array after it has been completed.  
+            data: this.props.prevData, // Change to an empty array after it has been completed.
+            submitted: false
           }
         }
         
@@ -265,13 +268,23 @@ class InputAddList extends React.Component{
         this.addNewRow = this.addNewRow.bind(this)
 
         this.sendIt = this.sendIt.bind(this);
+
+        this.editIt = this.editIt.bind(this);
     }
 
     sendIt(){
 
       this.props.updateIncomeDatabase(this.state.data)
+
+      this.setState({submitted:true})
       
     }
+
+    editIt(){
+
+      this.setState({submitted:false})
+    }
+    
 
     addNewRow(newData){
 
@@ -310,17 +323,27 @@ class InputAddList extends React.Component{
         return(
             
           <div >
-            <center><TableInput headers={this.props.headers} rowData ={this.state.data} addNewItem={this.addNewRow}/></center>
+            <center><TableInput submissionStatus={this.state.submitted} headers={this.props.headers} rowData ={this.state.data} addNewItem={this.addNewRow}/></center>
             <br></br>
             {
             //Show the table only if something exists in it.
             this.state.data.length > 0
                 &&
-                <>
-                <Table headers={this.props.headers} rowData ={this.state.data} updateSum={this.props.updateSum}  /> 
+                [<>
+                <Table  submissionStatus={this.state.submitted} headers={this.props.headers} rowData ={this.state.data} updateSum={this.props.updateSum}  /> 
 
-                <center><button onClick={this.sendIt} class="btn btn-success">Submit</button></center> 
+                <center>
+                  {
+                  !this.state.submitted
+                  ?
+                    <button onClick={this.sendIt} class="btn btn-success">Submit</button>
+                  
+                  :
+                    <button onClick={this.editIt} style={{"marginLeft":"20px"}} class="btn btn-primary" >Edit</button>
+                  }
+                </center> 
                 </>
+                ]
             }
           </div>
         
