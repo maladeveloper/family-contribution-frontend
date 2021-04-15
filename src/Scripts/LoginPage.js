@@ -13,12 +13,12 @@ class LoginPage extends React.Component{
 
         this.state = {
             //loggedOnUserId: null 
-            loggedOnUserId: "MAL001", //FOR NOW LETS ASSUME USER PUT THIS AS ID (later make a login page)
+            loggedOnUserId: "ANU001", //FOR NOW LETS ASSUME USER PUT THIS AS ID (later make a login page)
             logOnSuccess: false, 
         }
 
         //FOR NOW DISPATCH GETTING THE USER INFO
-        webFuncInteraction(backendWebVars.USER_INFO, {userId:"MAL001"}).then(data => this.updateLogonStatus(data))
+        webFuncInteraction(backendWebVars.USER_INFO, {userId:this.state.loggedOnUserId}).then(data => this.updateLogonStatus(data))
 
         this.updateLogonStatus = this.updateLogonStatus.bind(this); 
 

@@ -1,0 +1,10 @@
+
+.not-paid-parent{
+    border-style: solid;
+    border-width: 1px ;
+    border-color: yellow;
+    background-color: rgb(245, 211, 98);
+    margin: 50px;
+    border-radius: 25px;
+    padding: 20px;
+}

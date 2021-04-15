@@ -2,6 +2,7 @@ import React from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import IncomeSubmission from './IncomeSubmission';
+import Payment from './Payment';
 import {Select} from './Components/Select' 
 import {webFuncInteraction, backendWebVars} from "./BackendIneterface";
 
@@ -16,11 +17,14 @@ class Contribution extends React.Component{
             chosenDate: null,
             dateOptions: null, 
             dateInformation: null, 
-            dateInfoReceived: false, 
+            dateInfoReceived: false,
+            paymentInfo: null,
+            incomeUpdatedSetter:0 
 
         }
 
-        this.handleDateChoice = this.handleDateChoice.bind(this); 
+        this.handleDateChoice = this.handleDateChoice.bind(this);
+        this.userIncomeUpdated = this.userIncomeUpdated.bind(this);
 
     }
 
@@ -51,10 +55,18 @@ class Contribution extends React.Component{
           dateInformation: data,
           dateInfoReceived: true 
 
-        })          
+        }) 
       }) 
 
     }
+
+    userIncomeUpdated(){
+
+    this.setState({incomeUpdatedSetter: this.state.incomeUpdatedSetter + 1 })
+
+    }
+
+    
 
 
     
@@ -76,19 +88,20 @@ class Contribution extends React.Component{
               </div>
               {this.state.dateInfoReceived
                   ?
-                  <div> 
-                      <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
-                          <Tab eventKey="income-submission" title="Income Submission">
-                          <div><IncomeSubmission chosenDate={this.state.chosenDate} prevData={this.state.dateInformation}/></div>
-                          </Tab>
+                  [
+                    <div> 
+                        <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
+                            <Tab eventKey="income-submission" title="Income Submission">
+                            <div><IncomeSubmission userIncomeUpdated={this.userIncomeUpdated} chosenDate={this.state.chosenDate} prevData={this.state.dateInformation}/></div>
+                            </Tab>
 
-                          {//Payment tab should only pop-up after the condition that every one has submitted income.
-                          }
-                          <Tab eventKey="payment" title="Payment Summary">
-                          <div>World</div>
-                          </Tab>
-                      </Tabs>
-                  </div>
+                              <Tab eventKey="payment" title="Payment Summary">
+                              <div><Payment chosenDate={this.state.chosenDate} incomeCounter={this.state.incomeUpdatedSetter} /></div>
+                              </Tab>
+                    
+                        </Tabs>
+                    </div>
+                  ]
                   :
                   <div>Loading...</div>
               }

@@ -349,7 +349,6 @@ class InputAddList extends React.Component{
 
 function mergeRows(headers, currentRows, newRow){
 
-  console.log(currentRows)
   for(const header in headers){
 
     var headerInfo = headers[header]

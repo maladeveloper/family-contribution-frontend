@@ -1,5 +1,5 @@
-const BASE_URL = 'https://family-contribution-backend.herokuapp.com/'
-//const BASE_URL = "http://127.0.0.1:5000/"
+//const BASE_URL = 'https://family-contribution-backend.herokuapp.com/'
+const BASE_URL = "http://127.0.0.1:5000/"
 
 var requestOptions = {
     method: 'POST', 
@@ -24,10 +24,17 @@ export var backendWebVars = {
         URL: (argObject) =>BASE_URL+"getUserInfo?userId="+ argObject.userId
     },
 
+    PAY_INFO:{
+
+        method:"GET",
+        URL: (argObject) => BASE_URL + "getPendingUsers?date=" + argObject.date
+    },
+
     UPDATE_INCOME:{
         method: "POST",
         URL:(argObject) => BASE_URL + "updateIncomeSubmission"
     }
+
 
     
 

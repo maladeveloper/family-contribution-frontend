@@ -4,7 +4,6 @@ import {getUserInfo, getUserId} from './Redux/Selectors';
 import {DATE_INTERNAL_SEP, DATE_SEP} from './Variables';
 import { connect } from "react-redux";
 import {webFuncInteraction, backendWebVars} from "./BackendIneterface";
-import FormImpl from 'react-bootstrap/esm/Form';
 
 
 class IncomeSubmission extends React.Component{
@@ -43,6 +42,9 @@ class IncomeSubmission extends React.Component{
         var argObject = {incomeArray:dataToSend, userId:this.props.userId, chosenDate:this.props.chosenDate }
 
         webFuncInteraction(backendWebVars["UPDATE_INCOME"], argObject)
+
+        //Call parent to update the state.
+        this.props.userIncomeUpdated()
 
     }
 
