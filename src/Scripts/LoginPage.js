@@ -18,7 +18,7 @@ class LoginPage extends React.Component{
         }
 
         //FOR NOW DISPATCH GETTING THE USER INFO
-        webFuncInteraction(backendWebVars.USER_INFO, {userId:this.state.loggedOnUserId}).then(data => this.updateLogonStatus(data))
+        webFuncInteraction(backendWebVars.INIT, {userId:this.state.loggedOnUserId}).then(data => this.updateLogonStatus(data))
 
         this.updateLogonStatus = this.updateLogonStatus.bind(this); 
 

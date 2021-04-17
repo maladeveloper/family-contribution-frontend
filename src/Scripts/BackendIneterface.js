@@ -1,5 +1,5 @@
-const BASE_URL = 'https://family-contribution-backend.herokuapp.com/'
-//const BASE_URL = "http://127.0.0.1:5000/"
+//const BASE_URL = 'https://family-contribution-backend.herokuapp.com/'
+const BASE_URL = "http://127.0.0.1:5000/"
 
 var requestOptions = {
     method: 'POST', 
@@ -8,36 +8,38 @@ var requestOptions = {
 
 
 export var backendWebVars = {
+    
+    /////////////////////////////// BASICS ///////////////////////////////
+    INIT:{
+        method:"GET",
+        URL: (argObject) => BASE_URL +"basics/init?userId="+ argObject.userId
+    },
+    USER_INFO:{
+        method:"GET",
+        URL: (argObject) => BASE_URL+"basics/userInfo?userId="+ argObject.userId
+    },
 
     PREV_DATES:{
         method: "GET",
-        URL: (argObject) => BASE_URL + "previousDates",
+        URL: (argObject) => BASE_URL + "basics/previousDates",
     },
 
+    /////////////////////////////// PAYMENT ///////////////////////////////
     USER_SPEC_DATA:{
         method: "GET",
-        URL: (argObject) => BASE_URL+"getDateUserSpecificData?date="+argObject.date+"&userId="+argObject.userId,
+        URL: (argObject) => BASE_URL+"payment/dateUserSpecificData?date="+argObject.date+"&userId="+argObject.userId,
     },
 
-    USER_INFO:{
-        method:"GET",
-        URL: (argObject) =>BASE_URL+"getUserInfo?userId="+ argObject.userId
+    UPDATE_INCOME:{
+        method: "POST",
+        URL:(argObject) => BASE_URL + "payment/incomeUpdate"
     },
 
     PAY_INFO:{
 
         method:"GET",
-        URL: (argObject) => BASE_URL + "getPendingUsers?date=" + argObject.date
-    },
-
-    UPDATE_INCOME:{
-        method: "POST",
-        URL:(argObject) => BASE_URL + "updateIncomeSubmission"
+        URL: (argObject) => BASE_URL + "payment/pendingPaymentUsers?date=" + argObject.date
     }
-
-
-    
-
 }
 
 export var webFuncInteraction = (backendWebVar, argObject) =>{
