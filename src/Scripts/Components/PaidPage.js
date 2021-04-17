@@ -9,19 +9,15 @@ class PaidPage extends React.Component{
         super(props)
 
         this.state = {
-            rowData:null
+            rowData:this.props.payInfo.users
         }
 
     }
 
-    componentDidMount(){
-
-        var rowData = formatPayInfoToRowData(this.props.payInfo.users)
-
-        this.setState({
-
-            rowData: rowData
-        })
+    componentWillReceiveProps(nextProps){
+        
+        this.setState({rowData:nextProps.payInfo.users})
+    
     }
 
     render(){
@@ -82,34 +78,6 @@ const headers = {
         "id": "TAX_PERC",
         "unique": false
     },  
-
-}
-
-function formatPayInfoToRowData(payInfo){
-
-    var rowData = []
-
-    Object.entries(payInfo).forEach(element => {
-        
-        var newRow = {}
-
-        newRow["NAME"] = element[0]
-
-        newRow["TAX_DUE"] = Number(element[1]["taxDue"]) 
-        
-        newRow["INCOME"] = Number(element[1]["income"])
-
-        newRow["TAX_PERC"] = newRow["INCOME"]== 0 ? 0 : 100 * (newRow["TAX_DUE"]/newRow["INCOME"])
-
-        newRow["TAX_PERC"] = newRow["TAX_DUE"] == 0 ? 0 : newRow["TAX_PERC"]
-
-        rowData.push(newRow)
-
-    });
-
-    return rowData
-
-
 
 }
 

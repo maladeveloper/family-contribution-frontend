@@ -72,6 +72,7 @@ class Contribution extends React.Component{
     
 
     render(){
+
       //The date options must be chosen and loaded in
       if(this.state.dateOptions != null){
 

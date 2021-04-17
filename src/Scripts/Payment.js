@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import {webFuncInteraction, backendWebVars} from "./BackendIneterface";
 import NotPaidPage from "./Components/NotPaidPage";
 import PaidPage from "./Components/PaidPage";
-
+var deepEqual = require('deep-equal')
 
 class Payment extends React.Component{
 
@@ -13,7 +13,6 @@ class Payment extends React.Component{
 
         this.state = {
             payInfo: false,
-
         }
 
         this.setPaymentInfo = this.setPaymentInfo.bind(this)
@@ -21,39 +20,19 @@ class Payment extends React.Component{
 
     componentDidMount(){this.setPaymentInfo()}
 
-    componentDidUpdate(){this.setPaymentInfo()}
-
-    shouldComponentUpdate(nextProps, nextState){
-
-        if(JSON.stringify(this.props) === JSON.stringify(nextProps)){//Checks the counter to see if user has submitted a new submition
-
-
-            if(JSON.stringify(this.state) === JSON.stringify(nextState)){//Not a new submission but false because state is the same.
-                
-                return false
-
-            }
-        }
-        else{ //If there is a new submission update the counter
-
-            this.setPaymentInfo()
-        }
-
-        return true
-    }
+    componentWillReceiveProps(){this.setPaymentInfo()}
 
 
 
     setPaymentInfo(){
 
-        webFuncInteraction(backendWebVars.PAY_INFO, {date:this.props.chosenDate}).then(data =>this.setState({payInfo:data}))
+        webFuncInteraction(backendWebVars.PAY_INFO, {date:this.props.chosenDate}).then(data =>this.setState({payInfo:data, submitCounter: this.state.submitCounter+1}))
 
     }
 
 
     render(){
 
-        console.log(this.state.payInfo)
         return(
             <div>
                 { this.state.payInfo
@@ -66,7 +45,7 @@ class Payment extends React.Component{
 
                             ?
                             
-                            <div><PaidPage payInfo={this.state.payInfo}/></div>
+                            <div><PaidPage payInfo={this.state.payInfo} submitCounter={this.state.submitCounter}/></div>
 
                             :
 

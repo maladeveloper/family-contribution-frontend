@@ -9,7 +9,7 @@ export const Table = (props) => {
         
         <table className="table table-bordered table-hover">
         
-        <TableHeader headers={headers}></TableHeader>
+        <TableHeader headers={headers} haveDeleteOption={haveDeleteOption}></TableHeader>
         
         <TableBody submissionStatus={submissionStatus} headers={headers} rowData={rowData} updateSum={updateSum} haveDeleteOption={haveDeleteOption} ></TableBody>
         
@@ -21,7 +21,7 @@ export const Table = (props) => {
   
   const TableHeader = (props) => {
     
-    const { headers } = props;
+    const { headers, haveDeleteOption } = props;
     
     return(
         
@@ -35,7 +35,10 @@ export const Table = (props) => {
               
               })}
               
+              {!haveDeleteOption &&
+
               <th key={"remove"}><div></div></th>
+              }
             
             </tr>
         
@@ -76,7 +79,6 @@ class TableBody extends React.Component{
 
   buildRow(row, rowIndex, headers) {
 
-    console.log(this.props.rowData)
     return (
         <tr id={rowIndex}>
         

@@ -41,10 +41,8 @@ class IncomeSubmission extends React.Component{
 
         var argObject = {incomeArray:dataToSend, userId:this.props.userId, chosenDate:this.props.chosenDate }
 
-        webFuncInteraction(backendWebVars["UPDATE_INCOME"], argObject)
-
-        //Call parent to update the state.
-        this.props.userIncomeUpdated()
+        //Call parent to update the state after sending the new income to the database.
+        webFuncInteraction(backendWebVars["UPDATE_INCOME"], argObject).then(data =>this.props.userIncomeUpdated())
 
     }
 
