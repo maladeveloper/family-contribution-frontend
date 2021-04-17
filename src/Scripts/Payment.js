@@ -3,6 +3,7 @@ import {getUserInfo, getUserId} from './Redux/Selectors';
 import { connect } from "react-redux";
 import {webFuncInteraction, backendWebVars} from "./BackendIneterface";
 import NotPaidPage from "./Components/NotPaidPage";
+import PaidPage from "./Components/PaidPage";
 
 
 class Payment extends React.Component{
@@ -65,7 +66,7 @@ class Payment extends React.Component{
 
                             ?
                             
-                            <div>Paid Page</div>
+                            <div><PaidPage payInfo={this.state.payInfo}/></div>
 
                             :
 
