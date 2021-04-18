@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import {webFuncInteraction, backendWebVars} from "./BackendIneterface";
 import NotPaidPage from "./Components/NotPaidPage";
 import PaidPage from "./Components/PaidPage";
-var deepEqual = require('deep-equal')
+import {socket, INCOME_UPDATE } from "./DynBackendInterface";
 
 class Payment extends React.Component{
 
@@ -18,20 +18,30 @@ class Payment extends React.Component{
         this.setPaymentInfo = this.setPaymentInfo.bind(this)
     }
 
-    componentDidMount(){this.setPaymentInfo()}
+   
+    componentDidMount(){
 
-    componentWillReceiveProps(){this.setPaymentInfo()}
+        this.setPaymentInfo()
+        
+        socket.on(INCOME_UPDATE, () => {
 
+            this.setPaymentInfo()
+        });
+            
+    }
+    
 
 
     setPaymentInfo(){
 
-        webFuncInteraction(backendWebVars.PAY_INFO, {date:this.props.chosenDate}).then(data =>this.setState({payInfo:data, submitCounter: this.state.submitCounter+1}))
+        webFuncInteraction(backendWebVars.PAY_INFO, {date:this.props.chosenDate}).then(data =>this.setState({payInfo:data}))
 
     }
 
 
-    render(){
+    render(){  
+        
+        console.log(this.state.payInfo)
 
         return(
             <div>
@@ -45,12 +55,12 @@ class Payment extends React.Component{
 
                             ?
                             
-                            <div><PaidPage payInfo={this.state.payInfo} submitCounter={this.state.submitCounter}/></div>
+                            <div><PaidPage payInfo={this.state.payInfo}/></div>
 
                             :
 
                             <div>
-                                <NotPaidPage users={this.state.payInfo.notPaidUsers}/>
+                                <NotPaidPage users={this.state.payInfo.users}/>
                             </div>
                         }
                     </div>

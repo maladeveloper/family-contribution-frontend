@@ -24,7 +24,6 @@ class Contribution extends React.Component{
         }
 
         this.handleDateChoice = this.handleDateChoice.bind(this);
-        this.userIncomeUpdated = this.userIncomeUpdated.bind(this);
 
     }
 
@@ -60,11 +59,7 @@ class Contribution extends React.Component{
 
     }
 
-    userIncomeUpdated(){
 
-    this.setState({incomeUpdatedSetter: this.state.incomeUpdatedSetter + 1 })
-
-    }
 
     
 
@@ -93,11 +88,11 @@ class Contribution extends React.Component{
                     <div> 
                         <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
                             <Tab eventKey="income-submission" title="Income Submission">
-                            <div><IncomeSubmission userIncomeUpdated={this.userIncomeUpdated} chosenDate={this.state.chosenDate} prevData={this.state.dateInformation}/></div>
+                            <div><IncomeSubmission chosenDate={this.state.chosenDate} prevData={this.state.dateInformation}/></div>
                             </Tab>
 
                               <Tab eventKey="payment" title="Payment Summary">
-                              <div><Payment chosenDate={this.state.chosenDate} incomeCounter={this.state.incomeUpdatedSetter} /></div>
+                              <div><Payment chosenDate={this.state.chosenDate} /></div>
                               </Tab>
                     
                         </Tabs>

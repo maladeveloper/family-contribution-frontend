@@ -13,7 +13,7 @@ class LoginPage extends React.Component{
 
         this.state = {
             //loggedOnUserId: null 
-            loggedOnUserId: "ANU001", //FOR NOW LETS ASSUME USER PUT THIS AS ID (later make a login page)
+            loggedOnUserId: "MAI001", //FOR NOW LETS ASSUME USER PUT THIS AS ID (later make a login page)
             logOnSuccess: false, 
         }
 

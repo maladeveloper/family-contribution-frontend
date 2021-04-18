@@ -5,20 +5,7 @@ import DisplayTable from './DisplayTable';
 
 class PaidPage extends React.Component{
 
-    constructor(props){
-        super(props)
-
-        this.state = {
-            rowData:this.props.payInfo.users
-        }
-
-    }
-
-    componentWillReceiveProps(nextProps){
-        
-        this.setState({rowData:nextProps.payInfo.users})
-    
-    }
+    constructor(props){super(props)}
 
     render(){
         return(
@@ -26,17 +13,15 @@ class PaidPage extends React.Component{
   
                 <div>
                     {
-                    this.state.rowData
+                    this.props.payInfo.users
                     
                     ?
-                    <div><DisplayTable rowData={this.state.rowData} headers={headers} /></div>
+                    <div><DisplayTable rowData={this.props.payInfo.users} headers={headers} /></div>
                     :
                     <div>Loading</div>
 
 
                     }
-                      
-
                 </div>
 
             </>

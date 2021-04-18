@@ -22,14 +22,15 @@ class IncomeSubmission extends React.Component{
         this.updateIncomeDatabase = this.updateIncomeDatabase.bind(this)
 
     }
+
     shouldComponentUpdate(nextProps, nextState){
 
         if (JSON.stringify(this.state) === JSON.stringify(nextState)){
+
             return false
         }
 
         return true
-
     }
 
     updateSum(sum){
@@ -42,7 +43,7 @@ class IncomeSubmission extends React.Component{
         var argObject = {incomeArray:dataToSend, userId:this.props.userId, chosenDate:this.props.chosenDate }
 
         //Call parent to update the state after sending the new income to the database.
-        webFuncInteraction(backendWebVars["UPDATE_INCOME"], argObject).then(data =>this.props.userIncomeUpdated())
+        webFuncInteraction(backendWebVars["UPDATE_INCOME"], argObject)
 
     }
 
