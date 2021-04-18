@@ -10,6 +10,11 @@ var requestOptions = {
 export var backendWebVars = {
     
     /////////////////////////////// BASICS ///////////////////////////////
+    AUTH:{
+        method:"GET",
+        URL: (argObject) => BASE_URL + "basics/authId?userId="+ argObject.userId
+    },
+
     INIT:{
         method:"GET",
         URL: (argObject) => BASE_URL +"basics/init?userId="+ argObject.userId

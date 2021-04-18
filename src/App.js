@@ -1,5 +1,5 @@
 import './App.css';
-import LoginPage from './Scripts/LoginPage'
+import LoginParentPage from './Scripts/LoginParentPage'
 import { Provider } from 'react-redux'; 
 import store from './Scripts/Redux/Store';
 import {BASE_URL} from "./Scripts/DynBackendInterface";
@@ -11,7 +11,7 @@ function App() {
   return (
     <div >
       <Provider store={store}>
-        <LoginPage/>
+        <LoginParentPage/>
       </Provider>
 
     </div>

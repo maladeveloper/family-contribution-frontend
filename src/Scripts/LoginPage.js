@@ -1,60 +1,74 @@
 import React from 'react';
-import Contribution from './Contribution'
-import { connect } from "react-redux";
-import {UPDATEUSERINFO} from "./Redux/Actions"; 
-import {UPDATEUSERID} from "./Redux/Actions";
-import {getUserInfo} from "./Variables";
 import {webFuncInteraction, backendWebVars} from "./BackendIneterface";
+
+
 
 class LoginPage extends React.Component{
 
     constructor(props){
         super(props)
 
-        this.state = {
-            //loggedOnUserId: null 
-            loggedOnUserId: "MAI001", //FOR NOW LETS ASSUME USER PUT THIS AS ID (later make a login page)
-            logOnSuccess: false, 
-        }
+        this.captureUserId = this.captureUserId.bind(this);
 
-        //FOR NOW DISPATCH GETTING THE USER INFO
-        webFuncInteraction(backendWebVars.INIT, {userId:this.state.loggedOnUserId}).then(data => this.updateLogonStatus(data))
-
-        this.updateLogonStatus = this.updateLogonStatus.bind(this); 
+        this.state={loadingAuth: false}
 
     }
 
-    updateLogonStatus(data){
+    captureUserId(){
 
-        this.props.UPDATEUSERINFO(data)
+        var chosenId = document.getElementById("userInputId").value;
 
-        this.props.UPDATEUSERID(this.state.loggedOnUserId)
+        this.setState({loadingAuth:true})
 
-        this.setState({logOnSuccess: true})
+        //Check if the id is acceptable
+        webFuncInteraction(backendWebVars.AUTH, {userId:chosenId}).then((userStatus) =>{
+
+            this.setState({loadingAuth:false})
+
+            if(userStatus){
+                
+                this.props.setUserId(chosenId)
+            }
+            else{
+                alert("This ID is incorrect!")
+            }
+        })
 
     }
+
+
+
 
 
     render(){
+
         return(
-            <div>
-            {
-            this.state.logOnSuccess
 
-            ?
-                <div>
-                    <Contribution userId={this.state.loggedOnUserId}/>
-                </div>
-
-            :
-                <div>Hello world </div>
-            }
-            </div>
             
-        )
+            <div style={{"display":"flex", "flexDirection":"coloumn", "alignItems":"center", "height":"100vh", "justifyContent":"center"}}>
+                {
+                !this.state.loadingAuth
+                    ?
+                        <div style={{"display":"flex", "flexDirection":"coloumn", "borderStyle":"solid", "borderWidth":"1px", "justifyContent":"center", "padding":"10%"}}>
+                            <div style={{"display":"flex", "flexDirection":"row"}} >
+                                <label>Input ID:</label>
+                                <input id={"userInputId"} onKeyPress={event=>{ if(event.key==="Enter"){this.captureUserId()}}}></input>
+                            </div>
+                            <button onClick={this.captureUserId}>Enter</button>
+                        </div>
+                    :
+                        <div>Authorising ID...</div>
+                }
+            </div>
+
+            )
+
+
     }
+
+
 
 }
 
 
-export default connect(null, {UPDATEUSERINFO, UPDATEUSERID})(LoginPage);
+export default LoginPage;

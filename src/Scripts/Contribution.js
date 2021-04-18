@@ -83,7 +83,7 @@ class Contribution extends React.Component{
                 />
               </div>
               {this.state.dateInfoReceived
-                  ?
+                  &&
                   [
                     <div> 
                         <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
@@ -98,8 +98,7 @@ class Contribution extends React.Component{
                         </Tabs>
                     </div>
                   ]
-                  :
-                  <div>Loading...</div>
+                  
               }
 
           </div>

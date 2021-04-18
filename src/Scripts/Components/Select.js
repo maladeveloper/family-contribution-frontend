@@ -9,9 +9,8 @@ export const  Select = props => {
 		  onChange={props.handleChange}
 		  className="form-control"
 		>
-		  <option value="" disabled>
-			{props.placeholder}
-		  </option>
+			<option value="" selected disabled hidden>Choose here</option>
+
 		  {props.options.map(option => {
 			return (
 			  <option key={option} value={option} label={option}>

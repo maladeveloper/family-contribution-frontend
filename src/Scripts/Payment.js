@@ -33,6 +33,8 @@ class Payment extends React.Component{
 
 
     setPaymentInfo(){
+        
+        this.setState({payInfo:false})
 
         webFuncInteraction(backendWebVars.PAY_INFO, {date:this.props.chosenDate}).then(data =>this.setState({payInfo:data}))
 
@@ -41,8 +43,6 @@ class Payment extends React.Component{
 
     render(){  
         
-        console.log(this.state.payInfo)
-
         return(
             <div>
                 { this.state.payInfo
