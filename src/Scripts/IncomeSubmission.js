@@ -68,7 +68,7 @@ class IncomeSubmission extends React.Component{
                 </div>
             
                 <div class="income-box">
-                    <InputAddList headers={headerInfo} updateIncomeDatabase={this.updateIncomeDatabase} updateSum={this.updateSum} prevData={this.props.prevData}/>
+                    <InputAddList editAllowed={this.props.dateActive} headers={headerInfo} updateIncomeDatabase={this.updateIncomeDatabase} updateSum={this.updateSum} prevData={this.props.prevData}/>
                 </div>
 
             </div>

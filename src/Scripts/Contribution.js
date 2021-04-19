@@ -77,7 +77,7 @@ class Contribution extends React.Component{
                 <Select
                 title={"Select Date"}
                 name={'date'}
-                options = {this.state.dateOptions}
+                options = {Object.keys( this.state.dateOptions)}
                 value = {this.state.chosenDate}
                 handleChange = {this.handleDateChoice}
                 />
@@ -88,11 +88,11 @@ class Contribution extends React.Component{
                     <div> 
                         <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
                             <Tab eventKey="income-submission" title="Income Submission">
-                            <div><IncomeSubmission chosenDate={this.state.chosenDate} prevData={this.state.dateInformation}/></div>
+                            <div><IncomeSubmission dateActive={this.state.dateOptions[this.state.chosenDate]} chosenDate={this.state.chosenDate} prevData={this.state.dateInformation}/></div>
                             </Tab>
 
                               <Tab eventKey="payment" title="Payment Summary">
-                              <div><Payment chosenDate={this.state.chosenDate} /></div>
+                              <div><Payment chosenDate={this.state.chosenDate} dateActive={this.state.dateOptions[this.state.chosenDate]} /></div>
                               </Tab>
                     
                         </Tabs>

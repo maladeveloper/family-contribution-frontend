@@ -203,11 +203,14 @@ class InputAddList extends React.Component{
         return(
             
           <div >
-            <center><TableInput submissionStatus={this.state.submitted} headers={this.props.headers} rowData ={this.state.data} addNewItem={this.addNewRow}/></center>
-            <br></br>
-<>
-                <Table  submissionStatus={this.state.submitted} headers={this.props.headers} rowData ={this.state.data} updateSum={this.props.updateSum}  /> 
+            {this.props.editAllowed &&
 
+            <center><TableInput submissionStatus={this.state.submitted} headers={this.props.headers} rowData ={this.state.data} addNewItem={this.addNewRow}/></center>
+            }
+            <br></br>
+                <>
+                <Table haveDeleteOption={!this.props.editAllowed} submissionStatus={this.state.submitted} headers={this.props.headers} rowData ={this.state.data} updateSum={this.props.updateSum}  /> 
+                { this.props.editAllowed &&
                 <center>
                   {
                   !this.state.submitted
@@ -217,7 +220,8 @@ class InputAddList extends React.Component{
                   :
                     <button onClick={this.editIt} style={{"marginLeft":"20px"}} class="btn btn-primary" >Edit</button>
                   }
-                </center> 
+                </center>
+                } 
                 </>
                 
             
