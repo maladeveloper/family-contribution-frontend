@@ -43,10 +43,16 @@ const headers = {
           "array": null , //Must be here if readonly is true
         },
         "unique": true // Whether this field must be unique in the entire table - this can only be the case for ONE field. 
+    },
+    "CUR_INC":{
+        "type": "number", 
+        "disp": "Current Income ($)", 
+        "id": "CUR_INC",
+        "unique": false
     }, 
     "INCOME":{
         "type": "number", 
-        "disp": "Total Income ($)", 
+        "disp": "Averaged Income ($)", 
         "id": "INCOME",
         "unique": false
     },
