@@ -1,5 +1,6 @@
 import './App.css';
 import LoginParentPage from './Scripts/LoginParentPage'
+import Homepage from './Scripts/Homepage';
 import { Provider } from 'react-redux'; 
 import store from './Scripts/Redux/Store';
 import {BASE_URL} from "./Scripts/DynBackendInterface";

@@ -6,6 +6,7 @@ import {UPDATEUSERID} from "./Redux/Actions";
 import {getUserInfo} from "./Variables";
 import {webFuncInteraction, backendWebVars} from "./BackendIneterface";
 import LoginPage from "./LoginPage";
+import Homepage from './Homepage';
 
 class LoginParentPage extends React.Component{
 
@@ -14,14 +15,21 @@ class LoginParentPage extends React.Component{
 
         this.state = {
             //loggedOnUserId: null 
-            loggedOnUserId: null, //FOR NOW LETS ASSUME USER PUT THIS AS ID (later make a login page)
+            loggedOnUserId: null, 
             logOnSuccess: false, 
         }
 
+    
 
         this.updateLogonStatus = this.updateLogonStatus.bind(this);
-        this.setUserId = this.setUserId.bind(this); 
+        this.setUserId = this.setUserId.bind(this);
+        
+        
 
+    }
+    //REMOVE THIS CODE AFTER.
+    componentDidMount(){
+        this.setUserId("MAL001")
     }
 
     updateLogonStatus(data){
@@ -59,7 +67,7 @@ class LoginParentPage extends React.Component{
 
                             ?
                                 <div>
-                                    <Contribution userId={this.state.loggedOnUserId}/>
+                                    <Homepage userId={this.state.loggedOnUserId}/>
                                 </div>
 
                             :

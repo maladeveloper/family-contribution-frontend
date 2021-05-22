@@ -59,17 +59,17 @@ class Contribution extends React.Component{
 
     }
 
-
-
-    
-
-
-    
-
     render(){
+
+
+      
+      
 
       //The date options must be chosen and loaded in
       if(this.state.dateOptions != null){
+
+        //Date options are given in the array [["str_date", bool], ["str_date2", bool]], thus find bool of chosen state.
+        var dateActive = this.state.dateOptions.find(date => date[0] == this.state.chosenDate)
 
         return(
           <div>
@@ -77,7 +77,7 @@ class Contribution extends React.Component{
                 <Select
                 title={"Select Date"}
                 name={'date'}
-                options = {Object.keys( this.state.dateOptions)}
+                options = {this.state.dateOptions.map( date => date[0])}
                 value = {this.state.chosenDate}
                 handleChange = {this.handleDateChoice}
                 />
@@ -88,11 +88,11 @@ class Contribution extends React.Component{
                     <div> 
                         <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
                             <Tab eventKey="income-submission" title="Income Submission">
-                            <div><IncomeSubmission dateActive={this.state.dateOptions[this.state.chosenDate]} chosenDate={this.state.chosenDate} prevData={this.state.dateInformation}/></div>
+                            <div><IncomeSubmission dateActive={dateActive[1]} chosenDate={this.state.chosenDate} prevData={this.state.dateInformation}/></div>
                             </Tab>
 
                               <Tab eventKey="payment" title="Payment Summary">
-                              <div><Payment chosenDate={this.state.chosenDate} dateActive={this.state.dateOptions[this.state.chosenDate]} /></div>
+                              <div><Payment chosenDate={this.state.chosenDate} dateActive={dateActive[1]} /></div>
                               </Tab>
                     
                         </Tabs>
